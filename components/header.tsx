@@ -34,9 +34,9 @@ const Header = ({
         {rightString ? (
           <TouchableOpacity
             onPress={onPressRight}
-            className="bg-green-300 px-3 py-2 rounded-xl"
+            className="bg-green-400 px-3 py-2 rounded-xl"
           >
-            <Text className="text-sm font-bold">{rightString}</Text>
+            <Text className="text-sm font-bold text-white">{rightString}</Text>
           </TouchableOpacity>
         ) : (
           <View className="w-16" />

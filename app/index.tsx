@@ -9,8 +9,8 @@ import {
   incrementItem,
 } from "@/store/cart";
 import { useSelectedProduct } from "@/store/product-context";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 
 const Index = () => {
@@ -72,20 +72,22 @@ const Index = () => {
     });
   };
 
-  useEffect(() => {
-    const loadCartQuantities = async () => {
-      const cart = await getCart();
+  useFocusEffect(
+    useCallback(() => {
+      const loadCartQuantities = async () => {
+        const cart = await getCart();
 
-      const map: Record<number, number> = {};
-      cart.forEach((item) => {
-        map[item.id] = item.quantity;
-      });
+        const map: Record<number, number> = {};
+        cart.forEach((item) => {
+          map[item.id] = item.quantity;
+        });
 
-      setQuantities(map);
-    };
+        setQuantities(map);
+      };
 
-    loadCartQuantities();
-  }, []);
+      loadCartQuantities();
+    }, []),
+  );
 
   useEffect(() => {
     getData();
@@ -108,36 +110,34 @@ const Index = () => {
         onPressRight={() => router.push("/cart")}
       />
 
-      <View className="p-4 gap-4">
-        <FlatList
-          data={products}
-          ItemSeparatorComponent={() => <View className="h-4" />}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          contentContainerStyle={{ paddingBottom: 32 }}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => {
-            const quantity = quantities[item.id] || 0;
-            return (
-              <ProductCard
-                handleDecrement={() => handleDecrement(item.id)}
-                handleIncrement={() => handleIncrement(item.id)}
-                image={item.image}
-                onAddToCartPress={() => handleAdd(item)}
-                onCardPress={() => {
-                  router.push("/product");
-                  setProduct(item);
-                }}
-                price={item.price}
-                quantity={quantity}
-                title={item.title}
-                id={item.id}
-                key={item.id}
-              />
-            );
-          }}
-        />
-      </View>
+      <FlatList
+        data={products}
+        ItemSeparatorComponent={() => <View className="h-4" />}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        contentContainerStyle={{ paddingBottom: 32 }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          const quantity = quantities[item.id] || 0;
+          return (
+            <ProductCard
+              handleDecrement={() => handleDecrement(item.id)}
+              handleIncrement={() => handleIncrement(item.id)}
+              image={item.image}
+              onAddToCartPress={() => handleAdd(item)}
+              onCardPress={() => {
+                router.push("/product");
+                setProduct(item);
+              }}
+              price={item.price}
+              quantity={quantity}
+              title={item.title}
+              id={item.id}
+              key={item.id}
+            />
+          );
+        }}
+      />
     </View>
   );
 };

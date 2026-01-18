@@ -1,57 +1,49 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import AnimatedAddButton from "./animated-add-button";
 
-interface ProductCardProps {
+interface SingleCartProductProps {
   id: number;
   title: string;
   price: number;
   image: string;
   quantity: number;
-  onAddToCartPress: () => void;
   handleIncrement: () => void;
   handleDecrement: () => void;
-  onCardPress: () => void;
+  handleRemove: () => void;
 }
-
-const ProductCard = ({
+export default function SingleCartProduct({
   id,
   title,
   price,
   image,
   quantity,
-  onAddToCartPress,
   handleIncrement,
   handleDecrement,
-  onCardPress,
-}: ProductCardProps) => {
+  handleRemove,
+}: SingleCartProductProps) {
   return (
-    <TouchableOpacity
-      onPress={onCardPress}
-      className="bg-white rounded-2xl p-4 flex-row items-center mx-4"
-    >
+    <View className="bg-white rounded-2xl p-4 flex-row items-center mx-4">
       <Image
         source={{ uri: image }}
-        className="w-16 h-16 rounded-xl bg-gray-100"
+        className="w-14 h-14 rounded-xl bg-gray-100"
         resizeMode="contain"
       />
 
       <View className="flex-1 ml-4">
-        <Text className="text-base font-semibold w-4/5" numberOfLines={1}>
+        <Text className="font-semibold" numberOfLines={2}>
           {title}
         </Text>
-        <Text className="text-sm font-medium mt-1">${price}</Text>
-      </View>
 
-      {quantity === 0 ? (
-        <AnimatedAddButton label="Add to Cart" onPress={onAddToCartPress} />
-      ) : (
-        <View className="flex-row items-center gap-3">
+        <Text className="text-sm mt-1">
+          ${price} × {quantity}
+        </Text>
+
+        <View className="flex-row items-center gap-3 mt-2">
           <TouchableOpacity
             onPress={handleDecrement}
             className="px-3 py-1 rounded-lg bg-gray-200"
           >
-            <Text className="text-lg">−</Text>
+            <Text>−</Text>
           </TouchableOpacity>
 
           <Text className="font-semibold">{quantity}</Text>
@@ -60,12 +52,14 @@ const ProductCard = ({
             onPress={handleIncrement}
             className="px-3 py-1 rounded-lg bg-green-300"
           >
-            <Text className="text-lg">+</Text>
+            <Text>+</Text>
           </TouchableOpacity>
         </View>
-      )}
-    </TouchableOpacity>
-  );
-};
+      </View>
 
-export default ProductCard;
+      <TouchableOpacity onPress={handleRemove} className="ml-2">
+        <Text className="text-red-500 text-sm">Remove</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
