@@ -1,32 +1,19 @@
+import { SelectedProductProvider } from "@/store/product-context";
 import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
-import './globals.css';
+import Toast from "react-native-toast-message";
+import "./globals.css";
 
 export default function RootLayout() {
   return (
-    <>
+    <SelectedProductProvider>
       <StatusBar hidden={true} />
-
-      <Stack>
-        <Stack.Screen
-          name="products"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="product/[id]"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="cart"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      <Toast />
+    </SelectedProductProvider>
   );
 }
